@@ -1,47 +1,144 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import { onMount } from 'svelte';
+
+  let player_img = `./player.png`;
+  let player_money = 0;
+  let player_hunger = 0;
+  let status = "";
+
+  let timesSearched = 0;
+
+  let storeItems = [
+    "a bagel",
+    "a Tesco Meal Deal",
+    "some salmon meat",
+    "a hat"
+  ];
+
+  function randomIntFromInterval(min, max) {
+    return Number((Math.random() * (min - max) + max).toFixed(2));
+  }
+
+  function searchCash() {
+    /*
+    if (timesSearched >= 10) {
+      status = "You searched the streets... There was no cash. Try search again later.";
+      return;
+    }
+
+    timesSearched++;
+    let moneyFound = randomIntFromInterval(0.00, 1.00);
+
+    status = "You found $" + moneyFound + "!";
+    player_money += moneyFound;
+    player_money = Number(player_money).toFixed(2);
+    */
+  }
+
+  function browseReddit() {
+    status = "You browse r/furry_irl. You feel shame and regret.";
+  }
+
+  function beGay() {
+    status = "Being gay isn't a choice, but you try anyway. You don't feel any different.";
+  }
+
+  function bangWife() {
+    status = "You ask your wife to bang... You realize you have no wife.";
+  }
+
+  onMount(() => {
+    setInterval(() => {
+      timesSearched = 0;
+    }, 5000);
+  });
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <div class="player">
+    <div class="player-icon">
+      <img src={player_img}>
+    </div>
+    <div class="player-stats">
+      <div class="player-stats-stat">
+        <b>Money:</b> ${player_money}
+      </div>
+      <div class="player-stats-stat">
+        <b>Hunger:</b> ${player_hunger}
+      </div>
+      <div class="status">
+        {status}
+      </div>
+    </div>
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
+  <div class="controls">
+    <button on:click={searchCash}>Search the streets for change</button>
+    <button id="tescos">Go to Tescos</button>
+    <button on:click={bangWife}>Bang your wife</button>
+    <button on:click={beGay}>Be gay</button>
+    <button on:click={browseReddit}>Browse r/furry_irl</button>
   </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
 </main>
 
-<style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
+<style lang="scss">
+  main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+
+    .player {
+      display: flex;
+      margin-bottom: 10px;
+
+      &-icon {
+        width: 150px;
+        flex-shrink: 0;
+        margin-right: 10px;
+        border: 5px solid black;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 100%;
+          height: 100%;
+          align-self: center;
+          object-fit: contain;
+        }
+      }
+
+      &-stats {
+        flex-grow: 1;
+      }
+
+      .status {
+        width: 350px;
+        max-width: 100%;
+        padding: 10px 0 0;
+      }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+
+      button {
+        background: transparent;
+        border: 2px solid black;
+        border-radius: 0;
+        cursor: pointer;
+        transition: background 0.2s ease-out;
+        padding: 3px 5px;
+        margin: 0 5px 5px 0;
+        display: inline-flex;
+
+        &:hover {
+          background: #dedede;
+        }
+      }
+    }
   }
 </style>
