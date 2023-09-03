@@ -16,11 +16,10 @@
   ];
 
   function randomIntFromInterval(min, max) {
-    return Number((Math.random() * (min - max) + max).toFixed(2));
+    return parseFloat((Math.random() * (min - max) + max).toFixed(2));
   }
 
   function searchCash() {
-    /*
     if (timesSearched >= 10) {
       status = "You searched the streets... There was no cash. Try search again later.";
       return;
@@ -31,8 +30,7 @@
 
     status = "You found $" + moneyFound + "!";
     player_money += moneyFound;
-    player_money = Number(player_money).toFixed(2);
-    */
+    player_money = parseFloat(player_money.toFixed(2));
   }
 
   function browseReddit() {
@@ -47,9 +45,45 @@
     status = "You ask your wife to bang... You realize you have no wife.";
   }
 
+  function goToTescos() {
+    let newStatus = "You went to Tescos. ";
+
+    let itemCost = randomIntFromInterval(0.10, 10.00);
+    let item = storeItems[Math.floor(Math.random() * storeItems.length)];
+
+    newStatus += "You found " + item + " costing $" + itemCost + ". ";
+
+    let cantAfford = player_money < itemCost;
+
+    if (cantAfford) {
+      newStatus += "You couldn't afford it. ";
+    }
+    else {
+      player_money-= itemCost;
+      player_money = parseFloat(player_money.toFixed(2));
+
+      newStatus += "You bought " + item + ". ";
+
+      if (item == "a hat") {
+        storeItems.pop();
+        player_img = "./player-hat.png";
+        newStatus += " You look dapper.";
+      }
+      else {
+        player_hunger = 0;
+      }
+    }
+
+    status = newStatus;
+  }
+
   onMount(() => {
     setInterval(() => {
       timesSearched = 0;
+    }, 5000);
+
+    setInterval(() => {
+      player_hunger++;
     }, 5000);
   });
 </script>
@@ -64,7 +98,7 @@
         <b>Money:</b> ${player_money}
       </div>
       <div class="player-stats-stat">
-        <b>Hunger:</b> ${player_hunger}
+        <b>Hunger:</b> {player_hunger}
       </div>
       <div class="status">
         {status}
@@ -73,7 +107,7 @@
   </div>
   <div class="controls">
     <button on:click={searchCash}>Search the streets for change</button>
-    <button id="tescos">Go to Tescos</button>
+    <button on:click={goToTescos}>Go to Tescos</button>
     <button on:click={bangWife}>Bang your wife</button>
     <button on:click={beGay}>Be gay</button>
     <button on:click={browseReddit}>Browse r/furry_irl</button>
